@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nicole Life - dashboard pessoal de rotina, sonhos, hábitos e foco.">
+  <title>Nicole Life | Rotina pessoal</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <div class="brand">
+        <span class="brand-symbol">N</span>
+        <div>
+          <strong>Nicole Life</strong>
+          <small>Rotina com intenção</small>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <button class="menu-item active" data-view="dashboard"><span>⌂</span>Início</button>
+        <button class="menu-item" data-view="semana"><span>◷</span>Semana</button>
+        <button class="menu-item" data-view="objetivos"><span>◇</span>Sonhos</button>
+        <button class="menu-item" data-view="habitos"><span>✦</span>Hábitos</button>
+        <button class="menu-item" data-view="foco"><span>◴</span>Foco</button>
+        <button class="menu-item" data-view="diario"><span>✎</span>Meu espaço</button>
+      </nav>
+
+      <div class="quote-card">
+        <p>Pequenos passos constroem grandes sonhos.</p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <button class="mobile-menu" aria-label="Abrir menu">☰</button>
+        <div>
+          <p id="currentDate" class="eyebrow"></p>
+          <h1>Olá, Nicole <span aria-hidden="true">❤️</span></h1>
+          <p id="dailyMessage" class="soft-text">Organize seu dia, construa seu futuro.</p>
+        </div>
+        <div class="time-card">
+          <span id="weekday"></span>
+          <strong id="clock">00:00:00</strong>
+        </div>
+      </header>
+
+      <section id="dashboard" class="view active">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">Nicole Life</p>
+            <h2>Sua rotina com leveza, foco e propósito.</h2>
+            <p>Um painel pessoal para acompanhar tarefas, hábitos, sonhos e momentos importantes.</p>
+          </div>
+          <div class="hero-metrics">
+            <article><strong id="doneToday">0</strong><span>tarefas concluídas</span></article>
+            <article><strong id="habitRate">0%</strong><span>hábitos de hoje</span></article>
+            <article><strong id="focusMinutes">0</strong><span>minutos focados</span></article>
+          </div>
+        </div>
+
+        <div class="grid dashboard-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">✨ Minhas tarefas de hoje</p>
+                <h2>Prioridades</h2>
+              </div>
+              <button class="primary-btn" data-open-modal="taskModal">Adicionar</button>
+            </div>
+            <div id="taskList" class="list"></div>
+          </section>
+
+          <section class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Evolução</p>
+                <h2>Semana</h2>
+              </div>
+            </div>
+            <canvas id="weeklyChart"></canvas>
+          </section>
+        </div>
+
+        <div class="grid chart-grid">
+          <section class="panel chart-panel">
+            <h2>Tarefas concluídas</h2>
+            <canvas id="tasksChart"></canvas>
+          </section>
+          <section class="panel chart-panel">
+            <h2>Hábitos realizados</h2>
+            <canvas id="habitsChart"></canvas>
+          </section>
+          <section class="panel chart-panel">
+            <h2>Progresso das metas</h2>
+            <canvas id="goalsChart"></canvas>
+          </section>
+        </div>
+      </section>
+
+      <section id="semana" class="view">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Planejamento semanal</p>
+            <h2>Uma semana mais bonita de viver</h2>
+          </div>
+          <div class="week-summary">
+            <span><strong id="weekProgress">0%</strong> progresso</span>
+            <span><strong id="weekDone">0</strong> concluídas</span>
+            <span><strong id="bestDay">-</strong> melhor dia</span>
+          </div>
+        </div>
+        <div id="weekGrid" class="week-grid"></div>
+      </section>
+
+      <section id="objetivos" class="view">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Meus sonhos e metas</p>
+            <h2>Objetivos com direção</h2>
+          </div>
+          <button class="primary-btn" data-open-modal="goalModal">Novo objetivo</button>
+        </div>
+        <div id="goalList" class="card-grid"></div>
+      </section>
+
+      <section id="habitos" class="view">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Hábitos</p>
+            <h2>Rituais que cuidam de você</h2>
+          </div>
+          <button class="primary-btn" data-open-modal="habitModal">Novo hábito</button>
+        </div>
+        <div id="habitList" class="card-grid"></div>
+      </section>
+
+      <section id="foco" class="view">
+        <div class="focus-grid">
+          <section class="panel focus-panel">
+            <p class="eyebrow">Pomodoro</p>
+            <h2 id="focusMode">Tempo de foco</h2>
+            <div id="timerDisplay" class="timer">25:00</div>
+            <div class="button-row">
+              <button id="startTimer" class="primary-btn">Iniciar</button>
+              <button id="pauseTimer" class="secondary-btn">Pausar</button>
+              <button id="resetTimer" class="secondary-btn">Reiniciar</button>
+            </div>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Histórico</p>
+                <h2>Sessões realizadas</h2>
+              </div>
+              <strong id="totalFocusTime" class="accent-number">0 min</strong>
+            </div>
+            <div id="sessionList" class="list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="diario" class="view">
+        <section class="panel journal-panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Meu espaço</p>
+              <h2>Pensamentos, gratidão e planejamento</h2>
+            </div>
+            <span id="journalStatus" class="save-status">Salvo</span>
+          </div>
+          <textarea id="journalText" placeholder="Escreva o que você quer lembrar, agradecer ou organizar hoje..."></textarea>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="taskModal" class="modal" aria-hidden="true">
+    <form class="modal-box" data-form="task">
+      <h2>Tarefa</h2>
+      <input name="name" placeholder="Nome da tarefa" required>
+      <div class="form-grid">
+        <select name="category">
+          <option>Estudos</option>
+          <option>Trabalho</option>
+          <option>Faculdade</option>
+          <option>Projetos</option>
+          <option>Exercícios</option>
+          <option>Compromissos</option>
+          <option>Momentos pessoais</option>
+        </select>
+        <select name="priority">
+          <option>Alta</option>
+          <option>Média</option>
+          <option>Baixa</option>
+        </select>
+      </div>
+      <input type="hidden" name="id">
+      <div class="button-row end">
+        <button type="button" class="secondary-btn" data-close-modal>Cancelar</button>
+        <button class="primary-btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="goalModal" class="modal" aria-hidden="true">
+    <form class="modal-box" data-form="goal">
+      <h2>Objetivo</h2>
+      <input name="name" placeholder="Nome do objetivo" required>
+      <select name="category">
+        <option>Pessoal</option>
+        <option>Estudos</option>
+        <option>Carreira</option>
+        <option>Projetos</option>
+      </select>
+      <div class="form-grid">
+        <input name="deadline" type="date" required>
+        <input name="progress" type="number" min="0" max="100" value="10" required>
+      </div>
+      <input type="hidden" name="id">
+      <div class="button-row end">
+        <button type="button" class="secondary-btn" data-close-modal>Cancelar</button>
+        <button class="primary-btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <div id="habitModal" class="modal" aria-hidden="true">
+    <form class="modal-box" data-form="habit">
+      <h2>Hábito</h2>
+      <input name="name" placeholder="Ex: Leitura, autocuidado, beber água" required>
+      <div class="button-row end">
+        <button type="button" class="secondary-btn" data-close-modal>Cancelar</button>
+        <button class="primary-btn">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
